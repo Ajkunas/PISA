@@ -18,8 +18,9 @@ def create_sequences(df, split_type, one_hot=False):
         change_to_num = {'low': 0, 'high': 1}
         case_change_to_num = {'none': 0, 'case': 1}
 
-        for col in ['bucket_delta_successive', 'bucket_Submission_TreeDist_Successive', 'median_split_delta_successive', 'median_split_Submission_TreeDist_Successive', 'case_sequence']:
-            if col != 'case_sequence':
+        for col in ['bucket_delta_successive', 'bucket_Submission_TreeDist_Successive', 'median_split_delta_successive',
+                    'median_split_Submission_TreeDist_Successive', 'case_seq']:
+            if col != 'case_seq':
                 df[col] = df[col].map(change_to_num)
             else: 
                 df[col] = df[col].map(case_change_to_num)
@@ -29,6 +30,7 @@ def create_sequences(df, split_type, one_hot=False):
     code_seq = []
     error_seq = []
     case_seq = []
+    success_seq = []
 
     for student, data in df_student:
         
@@ -36,6 +38,7 @@ def create_sequences(df, split_type, one_hot=False):
         student_code_seq = []
         student_error_seq = []
         student_case_seq = []
+        student_success_seq = []
         
         for idx, row in data.iterrows():
             
@@ -47,18 +50,21 @@ def create_sequences(df, split_type, one_hot=False):
                 student_code_seq.append(row['median_split_Submission_TreeDist_Successive'])
                 
             if one_hot:
-                student_error_seq.append(row['error_sequence'])
+                student_error_seq.append(row['error_seq_gen'])
+                student_success_seq.append(row['success_seq'])
             else:
                 student_error_seq.append(row['error'])
+                student_success_seq.append(row['success'])
             
-            student_case_seq.append(row['case_sequence'])
+            student_case_seq.append(row['case_seq'])
             
         world_seq.append(student_world_seq)
         code_seq.append(student_code_seq)
         error_seq.append(student_error_seq)
         case_seq.append(student_case_seq)
+        success_seq.append(student_success_seq)
         
-    return world_seq, code_seq, error_seq, case_seq
+    return world_seq, code_seq, error_seq, case_seq, success_seq
 
 
 def prepare_sequences(df, activities, split_type, one_hot=False): 
@@ -74,27 +80,33 @@ def prepare_sequences(df, activities, split_type, one_hot=False):
     code_sequences = []
     error_sequences = []
     case_sequences = []
+    success_sequences = []
     
     if activities[0] == 1: 
-        world_seq1, code_seq1, error_seq1, case_seq1 = create_sequences(df_l1, split_type, one_hot)
+        world_seq1, code_seq1, error_seq1, case_seq1, success_seq1 = create_sequences(df_l1, split_type, one_hot)
         world_sequences += world_seq1
         code_sequences += code_seq1
         error_sequences += error_seq1
         case_sequences += case_seq1
+        success_sequences += success_seq1
+        
     if activities[1] == 1:
-        world_seq2, code_seq2, error_seq2, case_seq2 = create_sequences(df_l2, split_type, one_hot)
+        world_seq2, code_seq2, error_seq2, case_seq2, success_seq2 = create_sequences(df_l2, split_type, one_hot)
         world_sequences += world_seq2
         code_sequences += code_seq2
         error_sequences += error_seq2
         case_sequences += case_seq2
+        success_sequences += success_seq2
+        
     if activities[2] == 1:
-        world_seq3, code_seq3, error_seq3, case_seq3 = create_sequences(df_l3, split_type, one_hot)
+        world_seq3, code_seq3, error_seq3, case_seq3, success_seq3 = create_sequences(df_l3, split_type, one_hot)
         world_sequences += world_seq3
         code_sequences += code_seq3
         error_sequences += error_seq3
         case_sequences += case_seq3
+        success_sequences += success_seq3
         
-    return world_sequences, code_sequences, error_sequences, case_sequences
+    return world_sequences, code_sequences, error_sequences, case_sequences, success_sequences
 
 
 def one_hot_encode_sequences(sequences):
@@ -104,7 +116,7 @@ def one_hot_encode_sequences(sequences):
         encoded_sequences = [encoder.transform(np.array(seq).reshape(-1, 1)) for seq in sequences]
         return encoded_sequences, encoder
 
-def create_features_labels(world_sequences, code_sequences, error_sequences, case_sequences, task="baseline", one_hot=False):
+def create_features_labels_corr(world_sequences, code_sequences, error_sequences, case_sequences, task="baseline", one_hot=False):
     X, y = [], []
     
     task_mapping = {}
@@ -158,6 +170,35 @@ def create_features_labels(world_sequences, code_sequences, error_sequences, cas
                 X.append(features)
                 y.append(label)
     
+    return X, y
+
+def create_features_labels_success(world_sequences, code_sequences, error_sequences, case_sequences, success_sequences, task="baseline", one_hot=False):
+    X, y = [], []
+    
+    if one_hot:
+        world_sequences, _ = one_hot_encode_sequences(world_sequences)
+        code_sequences, _ = one_hot_encode_sequences(code_sequences)
+        error_sequences, _ = one_hot_encode_sequences(error_sequences)
+        case_sequences, _ = one_hot_encode_sequences(case_sequences)
+        success_sequences, _ = one_hot_encode_sequences(success_sequences)
+
+        task_mapping = {
+            "error": lambda w, co, e, ca, s: (np.hstack([w.flatten(), co.flatten(), e.flatten()]), s[0]),
+            "case": lambda w, co, e, ca, s: (np.hstack([w.flatten(), co.flatten(), ca.flatten()]), s[0])
+        }
+        
+    else: 
+        
+        task_mapping = {
+            "error": lambda w, co, e, cas, s: (w + co + e, s[0]),
+            "case": lambda w, co, e, ca, s: (w + co + ca, s[0])
+        }
+
+    for world_seq, code_seq, error_seq, case_seq, success_seq  in zip(world_sequences, code_sequences, error_sequences, case_sequences, success_sequences):
+            if task in task_mapping:
+                features, label = task_mapping[task](world_seq, code_seq, error_seq, case_seq, success_seq)
+                X.append(features)
+                y.append(label)
     return X, y
 
 
@@ -228,19 +269,28 @@ def train_model(model, X_train, y_train, X_valid, y_valid, criterion, optimizer,
 
 
 def train(model_type, data, epochs=100, lr=0.01, weight_decay=0.01, dropout=0.2, hidden_dim=100, test_size=0.2, 
-          activities=[1,1,1], split_type="distribution", task="baseline", evaluate=True, one_hot=False): 
+          activities=[1,1,1], split_type="distribution", task="baseline", prediction="correlation", evaluate=True, one_hot=False): 
     
-    world_sequences, code_sequences, error_sequences, case_sequences = prepare_sequences(data, activities, split_type)
+    world_sequences, code_sequences, error_sequences, case_sequences, success_sequences = prepare_sequences(data, activities, split_type)
     
     train_size = 1 - test_size
     world_seq_train, world_seq_test, world_seq_valid = split_data(world_sequences, train_size)
     code_seq_train, code_seq_test, code_seq_valid = split_data(code_sequences, train_size)
     error_seq_train, error_seq_test, error_seq_valid = split_data(error_sequences, train_size)
     case_seq_train, case_seq_test, case_seq_valid = split_data(case_sequences, train_size)
+    success_seq_train, success_seq_test, success_seq_valid = split_data(success_sequences, train_size)
     
-    X_train, y_train = create_features_labels(world_seq_train, code_seq_train, error_seq_train, case_seq_train, task, one_hot)
-    X_test, y_test = create_features_labels(world_seq_test, code_seq_test, error_seq_test, case_seq_test, task, one_hot)
-    X_valid, y_valid = create_features_labels(world_seq_valid, code_seq_valid, error_seq_valid, case_seq_valid, task, one_hot)
+
+    if prediction == "correlation":
+        X_train, y_train = create_features_labels_corr(world_seq_train, code_seq_train, error_seq_train, case_seq_train, task, one_hot)
+        X_test, y_test = create_features_labels_corr(world_seq_test, code_seq_test, error_seq_test, case_seq_test, task, one_hot)
+        X_valid, y_valid = create_features_labels_corr(world_seq_valid, code_seq_valid, error_seq_valid, case_seq_valid, task, one_hot)
+    elif prediction == "success":
+        X_train, y_train = create_features_labels_success(world_seq_train, code_seq_train, error_seq_train, case_seq_train, success_seq_train, task, one_hot)
+        X_test, y_test = create_features_labels_success(world_seq_test, code_seq_test, error_seq_test, case_seq_test, success_seq_test, task, one_hot)
+        X_valid, y_valid = create_features_labels_success(world_seq_valid, code_seq_valid, error_seq_valid, case_seq_valid, success_seq_valid, task, one_hot)
+    else: 
+        raise ValueError("Prediction not implemented")
 
     max_len = max(len(seq) for seq in X_train)
     pad_value = [0, 1] if one_hot else [0]
@@ -308,16 +358,17 @@ def train(model_type, data, epochs=100, lr=0.01, weight_decay=0.01, dropout=0.2,
 
 
 def cross_validate(model_type, data, epochs=100, lr=0.01, weight_decay=0.01, dropout=0.2, 
-                   hidden_dim=100, activities=[1,1,1], split_type="distribution", task="baseline", k=5, one_hot=False):
+                   hidden_dim=100, activities=[1,1,1], split_type="distribution", task="baseline", prediction="correlation", k=5, one_hot=False):
     
     kf = KFold(n_splits=k, shuffle=True, random_state=42)
     
-    world_sequences, code_sequences, error_sequences, case_sequences = prepare_sequences(data, activities, split_type)
+    world_sequences, code_sequences, error_sequences, case_sequences, success_sequences = prepare_sequences(data, activities, split_type)
     
     world_sequences = np.array(world_sequences, dtype=object)
     code_sequences = np.array(code_sequences, dtype=object)
     error_sequences = np.array(error_sequences, dtype=object)
     case_sequences = np.array(case_sequences, dtype=object)
+    success_sequences = np.array(success_sequences, dtype=object)
 
     auc_scores = []
     acc_scores = []
@@ -331,14 +382,22 @@ def cross_validate(model_type, data, epochs=100, lr=0.01, weight_decay=0.01, dro
         code_seq_train = code_sequences[train_index]
         error_seq_train = error_sequences[train_index]
         case_seq_train = case_sequences[train_index]
+        success_seq_train = success_sequences[train_index]
         
         world_seq_test = world_sequences[test_index]
         code_seq_test = code_sequences[test_index]
         error_seq_test = error_sequences[test_index]
         case_seq_test = case_sequences[test_index]
+        success_seq_test = success_sequences[test_index]
         
-        X_train, y_train = create_features_labels(world_seq_train, code_seq_train, error_seq_train, case_seq_train, task, one_hot)
-        X_test, y_test = create_features_labels(world_seq_test, code_seq_test, error_seq_test, case_seq_test, task, one_hot)
+        if prediction == "correlation":
+            X_train, y_train = create_features_labels_corr(world_seq_train, code_seq_train, error_seq_train, case_seq_train, task, one_hot)
+            X_test, y_test = create_features_labels_corr(world_seq_test, code_seq_test, error_seq_test, case_seq_test, task, one_hot)
+        elif prediction == "success":
+            X_train, y_train = create_features_labels_success(world_seq_train, code_seq_train, error_seq_train, case_seq_train, success_seq_train, task, one_hot)
+            X_test, y_test = create_features_labels_success(world_seq_test, code_seq_test, error_seq_test, case_seq_test, success_seq_test, task, one_hot)
+        else:
+            raise ValueError("Prediction not implemented")
         
         
         if not one_hot and task in ["code_error_n_only", "code_n_only", "error_n_only"]:

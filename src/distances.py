@@ -12,14 +12,15 @@ def preprocess(vector):
     matrix = []
     for i in range(len(vector)):
         matrix.append(vector[i].split(','))
-    
+
     # drops first row
-    matrix = matrix[1:]
+    #matrix = matrix[1:] # need the row with the robot arm
         
     for i in range(len(matrix)):
         matrix[i] = matrix[i][:-1]
         
     return np.array(matrix)
+
 
 # https://machinelearningknowledge.ai/ways-to-calculate-levenshtein-distance-edit-distance-in-python/
 def levenshtein_distance(s, t):
@@ -45,14 +46,9 @@ def levenshtein_distance(s, t):
 
     return d[m][n]
 
-def levenshtein_distance_combined(v1, v2, method='row_concat', test=False):
-    if not test:
-        v1_matrix = preprocess(v1)
-        v2_matrix = preprocess(v2)
-    else: 
-        v1_matrix = v1
-        v2_matrix = v2
-    
+def levenshtein_distance_combined(v1, v2, method='row_concat'):
+    v1_matrix = preprocess(v1)
+    v2_matrix = preprocess(v2)
     if method == 'row_concat':
         v1_string = ''.join([''.join(row) for row in v1_matrix])
         v2_string = ''.join([''.join(row) for row in v2_matrix])
@@ -82,13 +78,9 @@ def levenshtein_distance_combined(v1, v2, method='row_concat', test=False):
     return levenshtein_distance(v1_string, v2_string) / len(v1_string)
 
 ###### Ratcliff Obershelp Similarity ######
-def ratcliff_obershelp_distance_combined(v1, v2, method='row_concat', test=False):
-    if not test:
-        v1_matrix = preprocess(v1)
-        v2_matrix = preprocess(v2)
-    else: 
-        v1_matrix = v1
-        v2_matrix = v2
+def ratcliff_obershelp_distance_combined(v1, v2, method='row_concat'):
+    v1_matrix = preprocess(v1)
+    v2_matrix = preprocess(v2)
     
     if method == 'row_concat':
         v1_string = ''.join([''.join(row) for row in v1_matrix])
@@ -118,29 +110,6 @@ def ratcliff_obershelp_distance_combined(v1, v2, method='row_concat', test=False
 
     return 1 - td.ratcliff_obershelp.normalized_similarity(v1_string, v2_string)
 
-# Simple metric, comparing the strings of the vectors
-def simple_metric(v1, v2):
-    v1_matrix = preprocess(v1).T
-    v2_matrix = preprocess(v2).T
-    
-    v1_string = ''
-    for i in range(len(v1_matrix)):
-        v1_string += ''.join(v1_matrix[i])
-        
-    v2_string = ''
-    for i in range(len(v2_matrix)):
-        v2_string += ''.join(v2_matrix[i])
-    
-    if len(v1_string) != len(v2_string):
-        return -1
-
-    distance = 0
-    
-    for i in range(len(v1_string)):
-        if v1_string[i] != v2_string[i]:
-            distance += 1
-        
-    return (distance / len(v1_string))
 
 ################### Jaro and Jaro-Winkler Similarity ##################
 
@@ -256,13 +225,10 @@ def similarity_score(string1, string2, method):
     else:
         raise ValueError("Invalid method provided")
 
-def jaro_combined(v1, v2, similarity_metric='jaro', method='row_concat', test=False):
-    if not test:
-        v1_matrix = preprocess(v1)
-        v2_matrix = preprocess(v2)
-    else: 
-        v1_matrix = v1
-        v2_matrix = v2
+def jaro_combined(v1, v2, similarity_metric='jaro', method='row_concat'):
+    
+    v1_matrix = preprocess(v1)
+    v2_matrix = preprocess(v2)
     
     if method == 'row_concat':
         v1_string = ''.join([''.join(row) for row in v1_matrix])
@@ -291,132 +257,6 @@ def jaro_combined(v1, v2, similarity_metric='jaro', method='row_concat', test=Fa
         raise ValueError("Invalid method provided")
 
     return 1 - similarity_score(v1_string, v2_string, similarity_metric)
-
-### Euclidean distance ###
-
-# when student does an error => how to penalize it ? recomputing initial distance or giving the previous distance ? 
-# if we give the previous distance, we need to store it in the state
-
-# important to have the same number of elements in the two matrices => if it is not the case => what to return ? initial distance ? 
-
-def euclidean_v1(v, goal_v, print_results=False, penalty=True):
-    
-    # to tune !! 
-    ERROR_PENALTY = 0.1
-    ERROR = False
-    tot_distance = 0
-    
-    v_matrix = None
-    goal_matrix = None
-    
-        
-    v = v.replace("ra-world-shape ra-world-shapeA", "A")
-    v = v.replace("ra-world-shape ra-world-shapeB", "B")
-    v = ast.literal_eval(v)
-    
-    matrix = []
-    for i in range(len(v)):
-        matrix.append(v[i].split(','))
-    
-    # drops first row
-    matrix = matrix[1:]
-        
-    if matrix[-1][-1] != 'false':
-        ERROR = True
-        
-    for i in range(len(matrix)):
-        matrix[i] = matrix[i][:-1]
-    
-    v_matrix = np.array(matrix)
-    
-    goal_matrix = preprocess(goal_v)
-        
-    #print(v_matrix)
-    #print(goal_matrix)
-    
-    # count number of elements A in the matrix
-    initial_count_A = np.count_nonzero(v_matrix == 'A')
-    initial_count_B = np.count_nonzero(v_matrix == 'B')
-    #print("Initial count A:", initial_count_A)
-    #print("Initial count B:", initial_count_B)
-    
-    goal_count_A = np.count_nonzero(goal_matrix == 'A')
-    goal_count_B = np.count_nonzero(goal_matrix == 'B')
-    #print("Goal count A:", goal_count_A)
-    #print("Goal count B:", goal_count_B)
-        
-    initial_indices_A = np.argwhere(v_matrix == 'A')
-    initial_indices_B = np.argwhere(v_matrix == 'B')
-    goal_indices_A = np.argwhere(goal_matrix == 'A')
-    goal_indices_B = np.argwhere(goal_matrix == 'B')
-
-    init_permutations_indices_A = list(permutations(initial_indices_A))
-    init_permutations_indices_B = list(permutations(initial_indices_B))
-    goal_permutations_indices_A = list(permutations(goal_indices_A))
-    goal_permutations_indices_B = list(permutations(goal_indices_B))
-    
-    distances_A = []
-    distances_B = []
-    
-    # Calculate the maximum possible Euclidean distance
-    max_distance = np.linalg.norm(np.array([0, 0]) - np.array([len(goal_matrix)-1, len(goal_matrix[0])-1]))
-    #print("Max distance:", max_distance)
-
-    # for A
-    for goal_perm_A in goal_permutations_indices_A:
-        for init_perm_A in init_permutations_indices_A:
-            # Calculate Euclidean distance for the current permutation
-            distance_A = [np.linalg.norm(goal_index - initial_index) for goal_index, initial_index in zip(np.array(goal_perm_A), np.array(init_perm_A))]
-            distance_A = sum(distance_A)
-            distances_A.append(distance_A)
-            
-    # for B
-    for goal_perm_B in goal_permutations_indices_B:
-        for init_perm_B in init_permutations_indices_B:
-            # Calculate Euclidean distance for the current permutation
-            distance_B = [np.linalg.norm(goal_index - initial_index) for goal_index, initial_index in zip(np.array(goal_perm_B), np.array(init_perm_B))]
-            distance_B = sum(distance_B)
-            distances_B.append(distance_B)
-            
-            
-    #print("Distances A:", distances_A)
-    #print("Distances B:", distances_B)
-    
-    min_distance_A = min(distances_A)
-    min_distance_B = min(distances_B)
-    #print("Min distance A:", min_distance_A)
-    #print("Min distance B:", min_distance_B)
-    
-    # Normalize distances by dividing by the maximum distance
-    normalized_distance_A = min_distance_A / max_distance if max_distance != 0 else 0
-    normalized_distance_B = min_distance_B / max_distance if max_distance != 0 else 0
-    
-    #print("Normalized distance A:", normalized_distance_A)
-    #print("Normalized distance B:", normalized_distance_B)
-    
-    # count how many elements are not equal to E in the v_matrix
-    count = np.count_nonzero(v_matrix != 'E')
-    #print("Count:", count)
-
-    tot_distance = (normalized_distance_A + normalized_distance_B) / count
-    
-    if print_results:
-        print("Minimum distance for A:", min_distance_A)
-        print("Minimum distance for B:", min_distance_B)
-        print("Total distance:", tot_distance)
-        
-    # How to penalize errors ?
-    if penalty: 
-        if not ERROR:
-            if initial_count_A != goal_count_A or initial_count_B != goal_count_B:
-                tot_distance += ERROR_PENALTY
-
-        else: 
-            tot_distance += ERROR_PENALTY
-    
-    return tot_distance
-
-
 
 ################################################################################################
 # Euclidean distance after some error evaluation 
@@ -526,7 +366,7 @@ def euclidean(v, goal_v, move1, move2, place1, pickup1, missing, penalties):
     
     return tot_distance
 
-######################################## TESTING ANOTHER VERSION WHERE NORMALIZATION IS DONE AT THE END
+################################################################################################
 
 def euclidean_distance_v2(v_matrix, goal_matrix): 
     
@@ -549,9 +389,6 @@ def euclidean_distance_v2(v_matrix, goal_matrix):
     
     distances_A = []
     distances_B = []
-    
-    # Calculate the maximum possible Euclidean distance
-    #max_distance = np.linalg.norm(np.array([0, 0]) - np.array([len(goal_matrix)-1, len(goal_matrix[0])-1]))
 
     # for A
     for goal_perm_A in goal_permutations_indices_A:
@@ -578,7 +415,6 @@ def euclidean_distance_v2(v_matrix, goal_matrix):
     
     # count how many elements are not equal to E in the v_matrix
     count = np.count_nonzero(v_matrix == 'A') + np.count_nonzero(v_matrix == 'B')
-    #print("Count :", count)
 
     tot_distance = (min_distance_A  + min_distance_B) / count
     
@@ -596,7 +432,6 @@ def euclidean_v2(v, goal_v, move1, move2, place1, pickup1, missing, penalties):
     
     if missing == 1: 
         missing_element = None
-        
         initial_count_A = np.count_nonzero(v_matrix == 'A')
         initial_count_B = np.count_nonzero(v_matrix == 'B')
         
@@ -612,7 +447,6 @@ def euclidean_v2(v, goal_v, move1, move2, place1, pickup1, missing, penalties):
             v = v.replace("ra-world-arm", missing_element)
             
         v_matrix = preprocess(v)
-        
         tot_distance += euclidean_distance_v2(v_matrix, goal_matrix)
         
         if move1 == 1:
@@ -633,6 +467,6 @@ def euclidean_v2(v, goal_v, move1, move2, place1, pickup1, missing, penalties):
             tot_distance += penalties['move2']
         
     normalized_distance = tot_distance / max_distance if max_distance != 0 else 0
-    
+
     return normalized_distance
 
