@@ -1,0 +1,42 @@
+INFO:root:Starting the script...
+INFO:root:Sequences loaded using the lasat_tugdmkt sequencer...
+INFO:root:Mining process starting...
+INFO:root:  mining on the general population..
+INFO:root:  mining per group of attributes..
+INFO:root:    - success
+INFO:root:      - failure
+INFO:root:      - success
+INFO:root:    - has_error
+INFO:root:      - error
+INFO:root:      - no_error
+INFO:root:    - activity
+INFO:root:      - l1
+INFO:root:      - l2
+INFO:root:      - l3
+INFO:root:    - activity.success
+INFO:root:      - l1_failure
+INFO:root:      - l1_success
+INFO:root:      - l2_failure
+INFO:root:      - l2_success
+INFO:root:      - l3_failure
+INFO:root:      - l3_success
+INFO:root:    - activity.has_error
+INFO:root:      - l1_error
+INFO:root:      - l1_no_error
+INFO:root:      - l2_error
+INFO:root:      - l2_no_error
+INFO:root:      - l3_error
+INFO:root:      - l3_no_error
+INFO:root:    - activity.success.has_error
+INFO:root:      - l1_failure_error
+INFO:root:      - l1_failure_no_error
+INFO:root:      - l1_success_error
+INFO:root:      - l1_success_no_error
+INFO:root:      - l2_failure_error
+INFO:root:      - l2_failure_no_error
+INFO:root:      - l2_success_error
+INFO:root:      - l2_success_no_error
+INFO:root:      - l3_failure_error
+INFO:root:      - l3_failure_no_error
+INFO:root:      - l3_success_error
+INFO:root:      - l3_success_no_error

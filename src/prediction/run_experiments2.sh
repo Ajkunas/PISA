@@ -64,7 +64,7 @@ experiments = [
     {"experiment_name": "experiment11-5", "args": {"model_type": "lstm", "epochs": 150, "lr": 0.05, "dropout": 0.1, "weight_decay": 0, "hidden_dim": 100, "split_type": "distribution", "task": "code_error_n_world_n_prev_only", "one_hot": True, "k": 5}}
 ]
 
-output_file = "results_experiment2.json"
+output_file = "results_experiment2_update.json"
 data_path = "/Users/ajkunaseipi/Documents/MA4/PISA/data/robotarm_123.csv"
 
 for experiment in experiments:

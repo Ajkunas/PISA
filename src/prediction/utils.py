@@ -5,7 +5,6 @@ from sklearn.preprocessing import OneHotEncoder
 
 
 def create_sequences(df, split_type, one_hot=False): 
-    
     # Try to change the values of the columns to numerical values
     if not one_hot:
         change_to_num = {'low': 0, 'high': 1}
@@ -119,7 +118,7 @@ def pad_with_pattern(sequences, max_length, pattern):
         else:
             padded_seq = seq[:max_length]
         padded_sequences.append(padded_seq)
-    return np.array(padded_sequences)
+    return np.array(padded_sequences, dtype=np.float32)
 
 
 def split_data(data, train_size, val_ratio=0.5):

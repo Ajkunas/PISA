@@ -117,7 +117,7 @@ def plot_heatmap_presence(data, test, experiment, folder):
     plt.title('Pattern Presence for Experiment: ' + experiment)
     plt.tight_layout()
     plt.savefig(f'./{folder}/{experiment}_{test}.png')
-    plt.show()
+    #plt.show()
     
     
 def generate_plots(path, experiment, folder):
