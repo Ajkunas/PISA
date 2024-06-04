@@ -1,0 +1,454 @@
+{
+    "experiment1-1": {
+        "args": {
+            "model_type": "logistic",
+            "epochs": 200,
+            "lr": 0.01,
+            "dropout": 0,
+            "weight_decay": 0,
+            "split_type": "distribution",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": true,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.68",
+                "Standard Deviation of AUC": "0.08",
+                "Mean Accuracy": "0.78",
+                "Standard Deviation of Accuracy": "0.03"
+            }
+        ]
+    },
+    "experiment1-2": {
+        "args": {
+            "model_type": "logistic",
+            "epochs": 300,
+            "lr": 0.01,
+            "dropout": 0,
+            "weight_decay": 0.01,
+            "split_type": "distribution",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.75",
+                "Standard Deviation of AUC": "0.07",
+                "Mean Accuracy": "0.79",
+                "Standard Deviation of Accuracy": "0.03"
+            }
+        ]
+    },
+    "experiment1-3": {
+        "args": {
+            "model_type": "rf",
+            "split_type": "distribution",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.76",
+                "Standard Deviation of AUC": "0.08",
+                "Mean Accuracy": "0.81",
+                "Standard Deviation of Accuracy": "0.06"
+            }
+        ]
+    },
+    "experiment1-4": {
+        "args": {
+            "model_type": "lstm",
+            "epochs": 150,
+            "lr": 0.05,
+            "dropout": 0.1,
+            "weight_decay": 0,
+            "hidden_dim": 100,
+            "split_type": "distribution",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.72",
+                "Standard Deviation of AUC": "0.04",
+                "Mean Accuracy": "0.78",
+                "Standard Deviation of Accuracy": "0.03"
+            }
+        ]
+    },
+    "experiment1-5": {
+        "args": {
+            "model_type": "lstm",
+            "epochs": 150,
+            "lr": 0.05,
+            "dropout": 0.1,
+            "weight_decay": 0,
+            "hidden_dim": 100,
+            "split_type": "distribution",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": true,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.78",
+                "Standard Deviation of AUC": "0.06",
+                "Mean Accuracy": "0.80",
+                "Standard Deviation of Accuracy": "0.03"
+            }
+        ]
+    },
+    "experiment2-1": {
+        "args": {
+            "model_type": "logistic",
+            "epochs": 100,
+            "lr": 0.01,
+            "dropout": 0,
+            "weight_decay": 0.01,
+            "split_type": "distribution",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": true,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.73",
+                "Standard Deviation of AUC": "0.05",
+                "Mean Accuracy": "0.78",
+                "Standard Deviation of Accuracy": "0.04"
+            }
+        ]
+    },
+    "experiment2-2": {
+        "args": {
+            "model_type": "logistic",
+            "epochs": 300,
+            "lr": 0.01,
+            "dropout": 0,
+            "weight_decay": 0.01,
+            "split_type": "distribution",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.77",
+                "Standard Deviation of AUC": "0.06",
+                "Mean Accuracy": "0.81",
+                "Standard Deviation of Accuracy": "0.04"
+            }
+        ]
+    },
+    "experiment2-3": {
+        "args": {
+            "model_type": "rf",
+            "split_type": "distribution",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.79",
+                "Standard Deviation of AUC": "0.07",
+                "Mean Accuracy": "0.83",
+                "Standard Deviation of Accuracy": "0.04"
+            }
+        ]
+    },
+    "experiment2-4": {
+        "args": {
+            "model_type": "lstm",
+            "epochs": 150,
+            "lr": 0.05,
+            "dropout": 0.1,
+            "weight_decay": 0,
+            "hidden_dim": 100,
+            "split_type": "distribution",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.76",
+                "Standard Deviation of AUC": "0.07",
+                "Mean Accuracy": "0.80",
+                "Standard Deviation of Accuracy": "0.07"
+            }
+        ]
+    },
+    "experiment2-5": {
+        "args": {
+            "model_type": "lstm",
+            "epochs": 150,
+            "lr": 0.05,
+            "dropout": 0.1,
+            "weight_decay": 0,
+            "hidden_dim": 100,
+            "split_type": "distribution",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": true,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.71",
+                "Standard Deviation of AUC": "0.11",
+                "Mean Accuracy": "0.83",
+                "Standard Deviation of Accuracy": "0.04"
+            }
+        ]
+    },
+    "experiment3-1": {
+        "args": {
+            "model_type": "logistic",
+            "epochs": 200,
+            "lr": 0.01,
+            "dropout": 0,
+            "weight_decay": 0,
+            "split_type": "median",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": true,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.69",
+                "Standard Deviation of AUC": "0.06",
+                "Mean Accuracy": "0.78",
+                "Standard Deviation of Accuracy": "0.03"
+            }
+        ]
+    },
+    "experiment3-2": {
+        "args": {
+            "model_type": "logistic",
+            "epochs": 300,
+            "lr": 0.01,
+            "dropout": 0,
+            "weight_decay": 0.01,
+            "split_type": "median",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.78",
+                "Standard Deviation of AUC": "0.07",
+                "Mean Accuracy": "0.79",
+                "Standard Deviation of Accuracy": "0.03"
+            }
+        ]
+    },
+    "experiment3-3": {
+        "args": {
+            "model_type": "rf",
+            "split_type": "median",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.81",
+                "Standard Deviation of AUC": "0.07",
+                "Mean Accuracy": "0.86",
+                "Standard Deviation of Accuracy": "0.06"
+            }
+        ]
+    },
+    "experiment3-4": {
+        "args": {
+            "model_type": "lstm",
+            "epochs": 150,
+            "lr": 0.05,
+            "dropout": 0.1,
+            "weight_decay": 0,
+            "hidden_dim": 100,
+            "split_type": "median",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.74",
+                "Standard Deviation of AUC": "0.13",
+                "Mean Accuracy": "0.84",
+                "Standard Deviation of Accuracy": "0.04"
+            }
+        ]
+    },
+    "experiment3-5": {
+        "args": {
+            "model_type": "lstm",
+            "epochs": 150,
+            "lr": 0.05,
+            "dropout": 0.1,
+            "weight_decay": 0,
+            "hidden_dim": 100,
+            "split_type": "median",
+            "task": "error",
+            "prediction": "success",
+            "one_hot": true,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.74",
+                "Standard Deviation of AUC": "0.07",
+                "Mean Accuracy": "0.81",
+                "Standard Deviation of Accuracy": "0.03"
+            }
+        ]
+    },
+    "experiment4-1": {
+        "args": {
+            "model_type": "logistic",
+            "epochs": 100,
+            "lr": 0.01,
+            "dropout": 0,
+            "weight_decay": 0.01,
+            "split_type": "median",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": true,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.75",
+                "Standard Deviation of AUC": "0.05",
+                "Mean Accuracy": "0.78",
+                "Standard Deviation of Accuracy": "0.04"
+            }
+        ]
+    },
+    "experiment4-2": {
+        "args": {
+            "model_type": "logistic",
+            "epochs": 300,
+            "lr": 0.01,
+            "dropout": 0,
+            "weight_decay": 0.01,
+            "split_type": "median",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.82",
+                "Standard Deviation of AUC": "0.05",
+                "Mean Accuracy": "0.81",
+                "Standard Deviation of Accuracy": "0.03"
+            }
+        ]
+    },
+    "experiment4-3": {
+        "args": {
+            "model_type": "rf",
+            "split_type": "median",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.83",
+                "Standard Deviation of AUC": "0.05",
+                "Mean Accuracy": "0.87",
+                "Standard Deviation of Accuracy": "0.04"
+            }
+        ]
+    },
+    "experiment4-4": {
+        "args": {
+            "model_type": "lstm",
+            "epochs": 150,
+            "lr": 0.05,
+            "dropout": 0.1,
+            "weight_decay": 0,
+            "hidden_dim": 100,
+            "split_type": "median",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": false,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.76",
+                "Standard Deviation of AUC": "0.10",
+                "Mean Accuracy": "0.84",
+                "Standard Deviation of Accuracy": "0.04"
+            }
+        ]
+    },
+    "experiment4-5": {
+        "args": {
+            "model_type": "lstm",
+            "epochs": 150,
+            "lr": 0.05,
+            "dropout": 0.1,
+            "weight_decay": 0,
+            "hidden_dim": 100,
+            "split_type": "median",
+            "task": "case",
+            "prediction": "success",
+            "one_hot": true,
+            "k": 5,
+            "data": "robotarm_123.csv"
+        },
+        "results": [
+            {
+                "Mean AUC": "0.77",
+                "Standard Deviation of AUC": "0.06",
+                "Mean Accuracy": "0.79",
+                "Standard Deviation of Accuracy": "0.08"
+            }
+        ]
+    }
+}
