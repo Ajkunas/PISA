@@ -6,7 +6,6 @@ import torch.optim as optim
 from models import LogisticRegressionModel, LSTMModel
 
 from sklearn.model_selection import KFold
-from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, roc_curve, auc
 

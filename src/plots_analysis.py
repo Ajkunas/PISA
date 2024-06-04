@@ -36,16 +36,16 @@ def plots_per_student(df, filter, folder):
     ax.set_ylabel('Number of students')
     ax.legend()
     ax.set_title('Distribution of tentatives')
-    plt.savefig(f"../plot/{folder}/tentatives_per_student_hist.png")
-    plt.show()
+    plt.savefig(f"{folder}/tentatives_per_student_hist.png")
+    #plt.show()
     
     # plot boxplot of tentatives
     fig, ax = plt.subplots(figsize=(10, 5))
     sns.boxplot(x=filter, y='nb_tentative', data=df, ax=ax)
     ax.set_ylabel('Number of tentatives')
     ax.set_title('Boxplot of tentatives')
-    plt.savefig(f"../plot/{folder}/tentatives_per_student_boxplot.png")
-    plt.show()
+    plt.savefig(f"{folder}/tentatives_per_student_boxplot.png")
+    #plt.show()
     
     # distribution of euclidean distance
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -59,8 +59,8 @@ def plots_per_student(df, filter, folder):
     ax.set_xlim(0, 1)
     ax.legend()
     ax.set_title('Distribution of euclidean distance')
-    plt.savefig(f"../plot/{folder}/euclidean_distance_per_student_hist.png")
-    plt.show()
+    plt.savefig(f"{folder}/euclidean_distance_per_student_hist.png")
+    #plt.show()
     
     # plot boxplot of euclidean distance
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -68,8 +68,8 @@ def plots_per_student(df, filter, folder):
     sns.boxplot(x=filter, y='mean_euclidean_distance', data=df, ax=ax)
     ax.set_ylabel('Mean euclidean distance')
     ax.set_title('Boxplot of euclidean distance')
-    plt.savefig(f"../plot/{folder}/euclidean_distance_per_student_boxplot.png")
-    plt.show()
+    plt.savefig(f"{folder}/euclidean_distance_per_student_boxplot.png")
+    #plt.show()
     
     # plot euclidean distance per nb_tentative
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -78,7 +78,7 @@ def plots_per_student(df, filter, folder):
     ax.set_ylabel('Mean Euclidean distance for each Total Tentative')
     ax.set_xlabel("Nb of Total Tentative")
     ax.set_title('Euclidean distance')
-    plt.savefig(f"../plot/{folder}/euclidean_distance_nb_tentative.png")
+    plt.savefig(f"{folder}/euclidean_distance_nb_tentative.png")
     
     # distribution of delta successive
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -91,8 +91,8 @@ def plots_per_student(df, filter, folder):
     ax.set_ylabel('Number of students')
     ax.legend()
     ax.set_title('Distribution of delta successive')
-    plt.savefig(f"../plot/{folder}/delta_successive_per_student_hist.png")
-    plt.show()
+    plt.savefig(f"{folder}/delta_successive_per_student_hist.png")
+    #plt.show()
     
     # plot boxplot of delta successive
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -100,8 +100,8 @@ def plots_per_student(df, filter, folder):
     sns.boxplot(x=filter, y='mean_delta_successive', data=df, ax=ax)
     ax.set_ylabel('Mean delta successive')
     ax.set_title('Boxplot of delta successive')
-    plt.savefig(f"../plot/{folder}/delta_successive_per_student_boxplot.png")
-    plt.show()
+    plt.savefig(f"{folder}/delta_successive_per_student_boxplot.png")
+    #plt.show()
     
     # plot delta successive per nb_tentative
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -110,7 +110,7 @@ def plots_per_student(df, filter, folder):
     ax.set_ylabel('Mean Successive Euclidean distance for each Total Tentative')
     ax.set_xlabel("Nb of Total Tentative")
     ax.set_title('Euclidean distance')
-    plt.savefig(f"../plot/{folder}/delta_successive_nb_tentative.png")
+    plt.savefig(f"{folder}/delta_successive_nb_tentative.png")
     
     
 def plots(df, filter, folder): 
@@ -138,8 +138,8 @@ def plots(df, filter, folder):
     sns.boxplot(x=filter, y='euclidean_distance', hue=filter, data=df, ax=ax)
     ax.set_ylabel('Euclidean distance')
     ax.set_title('Boxplot of euclidean distance')
-    plt.savefig(f"../plot/{folder}/euclidean_distance_boxplot.png")
-    plt.show()
+    plt.savefig(f"{folder}/euclidean_distance_boxplot.png")
+    #plt.show()
     
     # plot euclidean distance histogram
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -150,8 +150,9 @@ def plots(df, filter, folder):
     ax.set_xlabel('Euclidean distance')
     ax.set_ylabel('Number of students')
     ax.set_title('Distribution of euclidean distance')
-    plt.savefig(f"../plot/{folder}/euclidean_distance_hist.png")
-    plt.show()
+    plt.legend()
+    plt.savefig(f"{folder}/euclidean_distance_hist.png")
+    #plt.show()
     
     # plot line plot of euclidean distance per pct_activity
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -160,8 +161,8 @@ def plots(df, filter, folder):
     ax.set_ylabel('Euclidean distance')
     ax.set_xlabel("Percentage of activity")
     ax.set_title(f'Evolution of euclidean distance, True: {nb_true_filtered}, False: {nb_false_filtered}')
-    plt.savefig(f"../plot/{folder}/euclidean_distance_pct_activity.png")
-    plt.show()
+    plt.savefig(f"{folder}/euclidean_distance_pct_activity.png")
+    #plt.show()
     
     # Multi plot of euclidean distance per tentative 
     fig, axs = plt.subplots(4, 3, figsize=(15, 12))
@@ -196,8 +197,8 @@ def plots(df, filter, folder):
 
     plt.suptitle("Euclidean distance")
     plt.tight_layout()
-    plt.savefig(f"../plot/{folder}/euclidean_distance_per_tentative_multi.png")
-    plt.show()
+    plt.savefig(f"{folder}/euclidean_distance_per_tentative_multi.png")
+    #plt.show()
     
     # plot delta successive
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -205,8 +206,8 @@ def plots(df, filter, folder):
     sns.boxplot(x=filter, y='delta_successive', hue=filter, data=df, ax=ax)
     ax.set_ylabel('Successive Euclidean distance')
     ax.set_title('Boxplot of successive euclidean distance')
-    plt.savefig(f"../plot/{folder}/delta_successive_boxplot.png")
-    plt.show()
+    plt.savefig(f"{folder}/delta_successive_boxplot.png")
+    #plt.show()
     
     # plot delta successive histogram
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -217,8 +218,9 @@ def plots(df, filter, folder):
     ax.set_xlabel('Successive Euclidean distance')
     ax.set_ylabel('Number of students')
     ax.set_title('Distribution of successive euclidean distance')
-    plt.savefig(f"../plot/{folder}/delta_successive_hist.png")
-    plt.show()
+    plt.legend()
+    plt.savefig(f"{folder}/delta_successive_hist.png")
+    #plt.show()
     
     # plot line plot of delta_successive per pct_activity
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -227,8 +229,8 @@ def plots(df, filter, folder):
     ax.set_ylabel('Successive Euclidean distance')
     ax.set_xlabel("Percentage of activity")
     ax.set_title(f'Evolution of successive euclidean distance, True: {nb_true_filtered}, False: {nb_false_filtered}')
-    plt.savefig(f"../plot/{folder}/delta_successive_pct_activity.png")
-    plt.show()
+    plt.savefig(f"{folder}/delta_successive_pct_activity.png")
+    #plt.show()
     
     # Multi plot of delta_successive per tentative 
     fig, axs = plt.subplots(4, 3, figsize=(15, 12))
@@ -263,8 +265,8 @@ def plots(df, filter, folder):
 
     plt.suptitle("Euclidean distance")
     plt.tight_layout()
-    plt.savefig(f"../plot/{folder}/delta_successive_per_tentative_multi.png")
-    plt.show()
+    plt.savefig(f"{folder}/delta_successive_per_tentative_multi.png")
+    #plt.show()
     
 
 def plots_errors_per_student(df, filter, folder): 
@@ -290,16 +292,16 @@ def plots_errors_per_student(df, filter, folder):
     ax.set_ylabel('Number of students')
     ax.legend()
     ax.set_title('Distribution of errors')
-    plt.savefig(f"../plot/{folder}/errors_per_student_hist.png")
-    plt.show()
+    plt.savefig(f"{folder}/errors_per_student_hist.png")
+    #plt.show()
     
     # plot boxplot of errors
     fig, ax = plt.subplots(figsize=(10, 5))
     sns.boxplot(x=filter, y='pct_error', data=df, ax=ax)
     ax.set_ylabel('Percentage of errors')
     ax.set_title('Boxplot of errors')
-    plt.savefig(f"../plot/{folder}/errors_per_student_boxplot.png")
-    plt.show()
+    plt.savefig(f"{folder}/errors_per_student_boxplot.png")
+    #plt.show()
     
     # distribution of errors
     for error in ['move1', 'move2', 'pickup1', 'place1']:
@@ -315,14 +317,14 @@ def plots_errors_per_student(df, filter, folder):
         ax.legend()
         ax.set_title(f'Distribution of {error}')
         plt.savefig(f"../plot/{folder}/{error}_per_student_hist.png")
-        plt.show()
+        #plt.show()
         
         fig, ax = plt.subplots(figsize=(10, 5))
         sns.boxplot(x=filter, y=f'pct_{error}', data=df, ax=ax)
         ax.set_ylabel(f'Percentage of {error}')
         ax.set_title(f'Boxplot of {error}')
-        plt.savefig(f"../plot/{folder}/{error}_per_student_boxplot.png")
-        plt.show()
+        plt.savefig(f"{folder}/{error}_per_student_boxplot.png")
+        #plt.show()
         
     
     # plot error_rate per nb_tentative
@@ -332,7 +334,7 @@ def plots_errors_per_student(df, filter, folder):
     ax.set_ylabel('Mean Error rate for each Total Tentative')
     ax.set_xlabel("Nb of Total Tentative")
     ax.set_title('Error Rate')
-    plt.savefig(f"../plot/{folder}/errors_per_student_nb_tentative.png")
+    plt.savefig(f"{folder}/errors_per_student_nb_tentative.png")
     
 
 def plots_errors(df, filter, folder): 
@@ -380,20 +382,20 @@ def plots_errors(df, filter, folder):
 
         plt.suptitle(f"{error} Rate")
         plt.tight_layout()
-        plt.savefig(f"../plot/{folder}/{error}_per_tentative_multi.png")
-        plt.show()
+        plt.savefig(f"{folder}/{error}_per_tentative_multi.png")
+        #plt.show()
         
     for col in ['nb_tentative', 'pct_activity']:
         fig, ax = plt.subplots(figsize=(10, 5))
-        for error in ['error','move1', 'move2', 'pickup1', 'place1']:
+        for error in ['move1', 'move2', 'pickup1', 'place1']:
             sns.lineplot(x=col, y=error, data=df, ax=ax, 
                         err_style="band", errorbar ='ci', estimator=np.mean, ci=95, label=error, legend=True)
         ax.set_ylabel(f'{error} rate')
         ax.set_xlabel(col)
         ax.set_title(f'Mean Error Rate per {col}')
         ax.legend(loc='upper right')
-        plt.savefig(f"../plot/{folder}/errors_type_{col}.png")
-        plt.show()
+        plt.savefig(f"{folder}/errors_type_{col}.png")
+        #plt.show()
         
         fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(10, 12))
         for error in ['move1', 'move2', 'pickup1', 'place1']:
@@ -413,8 +415,8 @@ def plots_errors(df, filter, folder):
         ax[1].set_title(f'Mean {error} Rate per {col} for Failing Students')
         ax[1].legend(loc='upper right')
         
-        plt.savefig(f"../plot/{folder}/errors_type_{col}_succ_fail.png")
-        plt.show()
+        plt.savefig(f"{folder}/errors_type_{col}_succ_fail.png")
+        #plt.show()
     
     
 def plots_distance_2dim(df, folder, filter): 
@@ -450,8 +452,8 @@ def plots_distance_2dim(df, folder, filter):
             axs[1].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
                 
             plt.suptitle(f"Total Tentatives={tot_tentatives[i]}, N={nb_success_student} successful students, N={nb_failing_student} failing students")
-            plt.savefig(f"../plot/{folder}/barplot_error_{col}_{tot_tentatives[i]}.png")
-            plt.show()
+            plt.savefig(f"{folder}/barplot_error_{col}_{tot_tentatives[i]}.png")
+            #plt.show()
     
     for col in ['euclidean_distance', 'delta_successive']: 
         # plotting the CASE for successful students
@@ -491,8 +493,8 @@ def plots_distance_2dim(df, folder, filter):
             
                 
             plt.suptitle(f"Total Tentatives={tot_tentatives[i]}, N={nb_success_student} Successful Students")
-            plt.savefig(f"../plot/{folder}/barplot_error_cases_{col}_tentative_{tot_tentatives[i]}_success.png")
-            plt.show()
+            plt.savefig(f"{folder}/barplot_error_cases_{col}_tentative_{tot_tentatives[i]}_success.png")
+            #plt.show()
             
             # for failing students
             for i in range(len(tot_tentatives)):
@@ -531,8 +533,8 @@ def plots_distance_2dim(df, folder, filter):
                 
                     
                 plt.suptitle(f"Total Tentatives={tot_tentatives[i]}, N={nb_failing_student} Failing Students")
-                plt.savefig(f"../plot/{folder}/barplot_error_cases_{col}_tentative_{tot_tentatives[i]}_fail.png")
-                plt.show()
+                plt.savefig(f"{folder}/barplot_error_cases_{col}_tentative_{tot_tentatives[i]}_fail.png")
+                #plt.show()
     
     
 def plots_comparision_tasks(df, folder, filter_task): 
@@ -555,8 +557,8 @@ def plots_comparision_tasks(df, folder, filter_task):
     sns.countplot(x=filter_task, data=df_grouped_per_student_per_task, ax=ax)
     ax.set_ylabel('Number of students')
     ax.set_title('Number of students per task')
-    plt.savefig(f"../plot/{folder}/students_per_{filter_task}_barplot.png")
-    plt.show()
+    plt.savefig(f"{folder}/students_per_{filter_task}_barplot.png")
+    #plt.show()
     
     # for each task, count the number of successful and failing students
     for task in tasks:
@@ -565,8 +567,8 @@ def plots_comparision_tasks(df, folder, filter_task):
         sns.countplot(x='success', data=df_grouped_per_student_per_task[df_grouped_per_student_per_task[filter_task] == task], ax=ax)
         ax.set_ylabel('Number of students')
         ax.set_title(f'Number of students for task {task}')
-        plt.savefig(f"../plot/{folder}/students_per_{filter_task}_{task}_barplot.png")
-        plt.show()
+        plt.savefig(f"{folder}/students_per_{filter_task}_{task}_barplot.png")
+        #plt.show()
     
         for col in ['euclidean_distance', 'delta_successive']:
             fig, ax = plt.subplots(figsize=(10, 5))
@@ -574,8 +576,8 @@ def plots_comparision_tasks(df, folder, filter_task):
             sns.boxplot(x='success', y=col, data=df[df[filter_task] == task], ax=ax)
             ax.set_ylabel(col)
             ax.set_title(f'Boxplot of {col} for task {task}')
-            plt.savefig(f"../plot/{folder}/{col}_{filter_task}_{task}_boxplot.png")
-            plt.show()
+            plt.savefig(f"{folder}/{col}_{filter_task}_{task}_boxplot.png")
+            #plt.show()
     
         # line plot of euclidean distance per task
         for col in ['nb_tentative', 'pct_activity']:
@@ -590,8 +592,8 @@ def plots_comparision_tasks(df, folder, filter_task):
                 ax.set_ylabel(type)
                 ax.set_xlabel(col)
                 ax.set_title(f'Evolution of {type} for task {task}')
-                plt.savefig(f"../plot/{folder}/{type}_{col}_{filter_task}_{task}_per_task_lineplot.png")
-                plt.show()
+                plt.savefig(f"{folder}/{type}_{col}_{filter_task}_{task}_per_task_lineplot.png")
+                #plt.show()
             
         for col in ['mean_euclidean_distance', 'mean_delta_successive', 'nb_tentative', 'pct_error']:
             fig, ax = plt.subplots(figsize=(10, 5))
@@ -599,8 +601,8 @@ def plots_comparision_tasks(df, folder, filter_task):
             sns.boxplot(x='success', y=col, data=df_grouped_per_student_per_task[df_grouped_per_student_per_task[filter_task] == task], ax=ax)
             ax.set_ylabel(col)
             ax.set_title(f'Boxplot of {col} per student for {task}')
-            plt.savefig(f"../plot/{folder}/{col}_{filter_task}_{task}_per_student_boxplot.png")
-            plt.show()
+            plt.savefig(f"{folder}/{col}_{filter_task}_{task}_per_student_boxplot.png")
+            #plt.show()
             
         # plot delta successive per nb_tentative
         for col in ['mean_euclidean_distance', 'mean_delta_successive', 'pct_error']:
@@ -610,7 +612,7 @@ def plots_comparision_tasks(df, folder, filter_task):
             ax.set_ylabel(col)
             ax.set_xlabel("Nb of Total Tentative")
             ax.set_title(f'{col} for each Total Tentative for task {task}')
-            plt.savefig(f"../plot/{folder}/{col}_{filter_task}_{task}_nb_tentative.png")
+            plt.savefig(f"{folder}/{col}_{filter_task}_{task}_nb_tentative.png")
             
         
         for col in ['euclidean_distance', 'delta_successive', 'error']:
@@ -649,8 +651,8 @@ def plots_comparision_tasks(df, folder, filter_task):
 
             plt.suptitle(f"{col} for task {task}")
             plt.tight_layout()
-            plt.savefig(f"../plot/{folder}/{col}_for_task_{task}_per_tentative_multi.png")
-            plt.show()
+            plt.savefig(f"{folder}/{col}_for_task_{task}_per_tentative_multi.png")
+           #plt.show()
     
                 
         # line plot of euclidean distance per task
@@ -666,8 +668,8 @@ def plots_comparision_tasks(df, folder, filter_task):
             ax.set_ylabel(type)
             ax.set_xlabel(col)
             ax.set_title(f'Evolution of {type} per task')
-            plt.savefig(f"../plot/{folder}/{type}_{col}_{filter_task}_per_task_lineplot.png")
-            plt.show()
+            plt.savefig(f"{folder}/{type}_{col}_{filter_task}_per_task_lineplot.png")
+            #plt.show()
         
         fig, ax = plt.subplots(figsize=(10, 5))
         
@@ -677,8 +679,8 @@ def plots_comparision_tasks(df, folder, filter_task):
             sns.boxplot(x=filter_task, y=col, data=df_grouped_per_student_per_task, ax=ax)
             ax.set_ylabel(col)
             ax.set_title(f'Boxplot of {col} per student per task')
-            plt.savefig(f"../plot/{folder}/{col}_{filter_task}_per_student_boxplot.png")
-            plt.show()
+            plt.savefig(f"{folder}/{col}_{filter_task}_per_student_boxplot.png")
+            #plt.show()
             
         # plot delta successive per nb_tentative
         for col in ['mean_euclidean_distance', 'mean_delta_successive']:
@@ -688,7 +690,7 @@ def plots_comparision_tasks(df, folder, filter_task):
             ax.set_ylabel(f'{col} for each Total Tentative')
             ax.set_xlabel("Nb of Total Tentative")
             ax.set_title(col)
-            plt.savefig(f"../plot/{folder}/{col}_{filter_task}_nb_tentative.png")
+            plt.savefig(f"{folder}/{col}_{filter_task}_nb_tentative.png")
             
         
 def plots_code_space(df, folder, success_filter): 
@@ -712,8 +714,8 @@ def plots_code_space(df, folder, success_filter):
     axs[1].set_ylabel('Code space distance')
     axs[1].set_title(f'Boxplot of code space distance for {label} students')
     
-    plt.savefig(f"../plot/{folder}/delta_successive_code_space_boxplot_{label}.png")
-    plt.show()
+    plt.savefig(f"{folder}/delta_successive_code_space_boxplot_{label}.png")
+    #plt.show()
     
 
     for col in ['nb_tentative', 'pct_activity']:
@@ -733,8 +735,8 @@ def plots_code_space(df, folder, success_filter):
             axs[1].set_title(f"Successive Code space distance")
             axs[1].set_xlabel(col)
             plt.suptitle(f"{name} Task, N={nb_student} {label} students")
-            plt.savefig(f"../plot/{folder}/{col}_{name}_euclidean_code_space_{label}.png")
-            plt.show()
+            plt.savefig(f"{folder}/{col}_{name}_euclidean_code_space_{label}.png")
+            #plt.show()
             
     
     # multi plot of euclidean distance and Submission_TreeDist_LastSubmission per tentative
@@ -770,8 +772,8 @@ def plots_code_space(df, folder, success_filter):
                 axs[2].set_title(f"Successive Code space distance")
                 axs[2].set_xlabel("Tentative")
                 plt.suptitle(f"{name} Task, Tentative {tentatives[i]}, N={nb_student} {label} students")
-                plt.savefig(f"../plot/{folder}/barplot_error_{name}_tentative_{tentatives[i]}_euclidean_code_space_{label}.png")
-                plt.show()
+                plt.savefig(f"{folder}/barplot_error_{name}_tentative_{tentatives[i]}_euclidean_code_space_{label}.png")
+                #plt.show()
          
     # scatter plot of euclidean distance and Submission_TreeDist_Successive
     fig, axs = plt.subplots(3, 1, figsize=(10, 15))
@@ -784,8 +786,8 @@ def plots_code_space(df, folder, success_filter):
 
         ax.set_title(name)
 
-    plt.savefig(f"../plot/{folder}/scatterplot_euclidean_code_space_{label}.png")
-    plt.show()
+    plt.savefig(f"{folder}/scatterplot_euclidean_code_space_{label}.png")
+    #plt.show()
 
     for df in dfs: 
         print(stats.pearsonr(df['delta_successive'], df['Submission_TreeDist_Successive']))
@@ -845,8 +847,8 @@ def plots_error_code_world_succ(df, folder, success_filter, type):
                 axs[2].set_title(f'{type}_Submission_TreeDist_Successive')
                 axs[2].set_xlabel("Tentative")
                 plt.suptitle(f"{name} Task, Tentative {tentatives[i]}, N={nb_student} {label} students")
-                plt.savefig(f"../plot/{folder}/barplot_error_per_student_{name}_tentative_{tentatives[i]}_euclidean_code_space_{label}.png")
-                plt.show()
+                plt.savefig(f"{folder}/barplot_error_per_student_{name}_tentative_{tentatives[i]}_euclidean_code_space_{label}.png")
+                #plt.show()
         
         
 def plot_loss_roc(loss_train, loss_valid, roc_auc, fpr, tpr, roc=False): 
@@ -861,7 +863,7 @@ def plot_loss_roc(loss_train, loss_valid, roc_auc, fpr, tpr, roc=False):
         plt.ylabel('True Positive Rate')
         plt.title('Receiver Operating Characteristic (ROC) Curve')
         plt.legend(loc='lower right')
-        plt.show()
+        #plt.show()
     
     # Plot loss
     plt.plot(loss_train, label='Train')
@@ -869,4 +871,4 @@ def plot_loss_roc(loss_train, loss_valid, roc_auc, fpr, tpr, roc=False):
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend()
-    plt.show()
+    #plt.show()
