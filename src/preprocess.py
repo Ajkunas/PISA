@@ -21,6 +21,8 @@ INIT_WORLDSPACE_L2 = "['E,E,ra-world-arm,E,E,', 'E,E,E,E,E,', 'E,E,E,E,E,', 'E,E
 INIT_WORLDSPACE_L3 = "['ra-world-arm,E,E,E,E,', 'E,E,E,E,E,', 'E,E,E,E,E,', 'E,E,E,E,E,', 'E,E,ra-world-shape ra-world-shapeB,E,E,', 'E,ra-world-shape ra-world-shapeA,ra-world-shape ra-world-shapeA,E,E,', 'E,ra-world-shape ra-world-shapeA,ra-world-shape ra-world-shapeB,E,E,false']" 
 
 PENALTIES = {'move1': 0.1, 'move2': 0.1, 'pickup1': 0.1, 'place1': 0.1}
+NO_PENALTIES = {'move1': 0, 'move2': 0, 'pickup1': 0, 'place1': 0}
+OPTIMAL_PENALTIES = {'move1': 0.3, 'move2': 0.3, 'pickup1': 0.3, 'place1': 0.3}
 
 ##################################################################################################
 
