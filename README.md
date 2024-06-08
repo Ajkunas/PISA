@@ -35,7 +35,7 @@ The project is divided into four parts:
 2. Pattern mining on the different spaces. 
 3. Predicitve models for correlation and success. 
 
-#### Evaluation of a distance metric 
+### Evaluation of a distance metric 
 
 Several distances were considered, and their implementation is in the `distances.py` file inside the `src` folder. 
 
