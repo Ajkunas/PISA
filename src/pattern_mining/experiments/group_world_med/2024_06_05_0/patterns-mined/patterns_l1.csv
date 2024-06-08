@@ -1,0 +1,10 @@
+Pattern,I-Support (I-Frequency Mean),I-Frequency Std Dev,I-Frequency Total,S-Frequency Total,S-Support (S-Frequency %)
+high,3.1666666666666665,1.6501366063669198,969.0,305,0.9967319965362549
+low,2.199346405228758,2.595607809219664,673.0,228,0.7450980544090271
+high -> low,1.2385620915032676,1.1359764591769206,379.0,225,0.7352941036224365
+high -> high,0.9346405228758168,0.7948457123354734,286.0,220,0.7189542651176453
+low -> high,0.915032679738562,1.0800589687501847,280.0,175,0.5718954205513
+
+
+Dataset Info: ,Dataset: AllStudents
+Applied Algorithm(s) Info: ,Sequential Pattern Mining Parameters: MinSupport = 0.5; MinGap = 0; MaxGap = 0; RegEx = .*; Calculate i-frequency? = true; Normalize by sequence length? = false; Count overlapping matches in i-frequency? = false; ; Result Set Sorting Parameters:   MD key for ordering results = SSupport;   Flag whether to sort descending (vs. ascending) = true;   Default value for sort (if no MD value found) = 0.0; 

@@ -1,5 +1,7 @@
 import numpy as np
+import os
 
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import OneHotEncoder
 
 
@@ -111,9 +113,12 @@ def one_hot_encode_sequences(sequences):
 def pad_with_pattern(sequences, max_length, pattern):
     padded_sequences = []
     for seq in sequences:
+        #print("seq : ", seq)
         if len(seq) < max_length:
             padding_length = max_length - len(seq)
+            #print("padding_length : ", padding_length)
             padding = np.tile(pattern, padding_length // len(pattern))[:padding_length]
+            #print("padding : ", padding)
             padded_seq = np.concatenate([padding, seq])
         else:
             padded_seq = seq[:max_length]
@@ -131,3 +136,63 @@ def split_data(data, train_size, val_ratio=0.5):
             data[train_idx:train_idx + val_idx],
             data[train_idx + val_idx:]
         )
+        
+def plot_loss_roc(loss_train, loss_valid, roc_auc, fpr, tpr, roc=False): 
+    # Plot ROC curve
+    if roc:
+        plt.figure()
+        plt.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+        plt.plot([0, 1], [0, 1], color='grey', lw=2, linestyle='--')
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('Receiver Operating Characteristic (ROC) Curve')
+        plt.legend(loc='lower right')
+        #plt.show()
+    
+    # Plot loss
+    plt.plot(loss_train, label='Train')
+    plt.plot(loss_valid, label='Valid')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend()
+    #plt.show()
+    
+
+def plot_truncate(method, method_params, mean_aucs, std_aucs, baseline_auc, path_to_save):
+    
+    baseline_auc = float(baseline_auc)
+    
+    mean_aucs_last = mean_aucs[method]["last"]
+    std_aucs_last = std_aucs[method]["last"]
+    mean_aucs_first = mean_aucs[method]["first"]
+    std_aucs_first = std_aucs[method]["first"]
+
+    # Ensure all values are numeric
+    mean_aucs_last = [float(x) for x in mean_aucs_last]
+    mean_aucs_first = [float(x) for x in mean_aucs_first]
+    std_aucs_last = [float(x) for x in std_aucs_last]
+    std_aucs_first = [float(x) for x in std_aucs_first]
+
+    plt.figure(figsize=(8, 4))
+
+    # Plot mean AUCs with error bars
+    plt.errorbar(method_params, mean_aucs_last, yerr=std_aucs_last, fmt='-o', label="Last")
+    plt.errorbar(method_params, mean_aucs_first, yerr=std_aucs_first, fmt='-s', label="First")
+
+    # Plot the baseline mean AUC line
+    plt.axhline(y=baseline_auc, color='r', linestyle='--', label=f"Baseline Mean AUC: {baseline_auc:.2f}")
+
+    # Adding labels and title
+    plt.xlabel("Number of attributes to truncate")
+    plt.ylabel("Mean AUC")
+    plt.title("Mean AUC vs Number of attempts to truncate")
+    plt.legend()
+    
+    if not os.path.exists(path_to_save):
+        os.makedirs(path_to_save)
+
+    # Display the plot
+    plt.savefig(path_to_save + f"mean_auc_{method}.png")
+    #plt.show()

@@ -4,15 +4,25 @@ from distances import *
 import warnings
 warnings.filterwarnings('ignore')
 
+import os   
+
 
 # main function
 def run_distance_tests():
+    
+    folder_root = '../plots/' # change accordingly: root folder for the plots
+    folder_path = folder_root + 'distance_tests/'
+    
+    # Create the folder if it does not exist
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
     
     ## Basic tests for sanity check
     
     # Euclidean distance
     NO_PENALTIES = {'move1': 0, 'move2': 0, 'pickup1': 0, 'place1': 0}
 
+    print("Sanity check for the distance metrics...")
     distance = euclidean_v2(KEY_VECTOR_V, KEY_VECTOR_V, 0, 0, 0, 0, 0, NO_PENALTIES)
     print("Distance between V and V: ", distance)
     
@@ -20,10 +30,10 @@ def run_distance_tests():
     print("Distance between W and W: ", distance)
     
     distance = euclidean_v2(KEY_VECTOR_X, KEY_VECTOR_X, 0, 0, 0, 0, 0, NO_PENALTIES)
-    print("Distance between V and V: ", distance)
+    print("Distance between X and X: ", distance)
     
     distance = euclidean_v2(KEY_VECTOR_Z, KEY_VECTOR_Z, 0, 0, 0, 0, 0, NO_PENALTIES)
-    print("Distance between V and V: ", distance)
+    print("Distance between Z and Z: ", distance)
     
     # Levendstein distance
     distance = levenshtein_distance(KEY_VECTOR_V, KEY_VECTOR_V)
@@ -64,9 +74,9 @@ def run_distance_tests():
     distance = jaro_combined(KEY_VECTOR_Z, KEY_VECTOR_Z)
     print("Jaro distance between Z and Z: ", distance)
     
-    ## Test for sequnences of movements
-    folder_path = '../plot/plot_tests/'
+    print("Plotting results for sequence of movements...")
     
+    # Tests for sequnences of movements
     test_comparing_metrics(LIST_VECTORS_1, KEY_VECTOR_V, 
                        "Comparing vectors from initial state to the goal state by moving one can at a time (from left to right)", 
                        folder_path, nb=1)
@@ -112,6 +122,8 @@ def run_distance_tests():
     test_comparing_euclidean_jaro(LIST_VECTOR_Z1, KEY_VECTOR_Z, "2 cans and 2 glasses - variation of the results",
                               folder_path, nb=8)
     
+    
+    print("Testing the euclidean distance metric with penalties...")
     ## Testing the euclidean distance with penalties
     KEY_VECTOR_V_MISSING = "['ra-world-arm,E,E,E,E,', 'E,E,E,E,E,', 'E,E,E,E,E,', 'E,E,E,E,E,', 'E,E,E,E,E,', 'E,E,E,E,ra-world-shape ra-world-shapeA,', 'E,E,E,E,E,false']"
     PENALTIES = {'move1': 0.1, 'move2': 0.1, 'pickup1': 0.1, 'place1': 0.1}
@@ -135,6 +147,7 @@ def run_distance_tests():
     # Other type of error
     distance = euclidean_v2(KEY_VECTOR_V_MISSING, KEY_VECTOR_V, 0, 1, 0, 0, 1, PENALTIES)
     print("Distance between V and V with an error: ", distance)
+    
     
     
 if __name__ == "__main__":

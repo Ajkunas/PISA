@@ -6,10 +6,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.ticker as ticker
 
-from scipy import stats
 
-
-def plots_per_student(df, filter, folder): 
+def plots_per_student(df, folder, filter="success"): 
     
     df_success = df[df['success'] == 1] 
     df_fail = df[df['success'] == 0]
@@ -113,7 +111,7 @@ def plots_per_student(df, filter, folder):
     plt.savefig(f"{folder}/delta_successive_nb_tentative.png")
     
     
-def plots(df, filter, folder): 
+def plots_general(df, folder, filter="success"): 
     
     tot_tentatives = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     
@@ -269,7 +267,7 @@ def plots(df, filter, folder):
     #plt.show()
     
 
-def plots_errors_per_student(df, filter, folder): 
+def plots_errors_per_student(df, folder, filter="success"): 
     
     tot_tentatives = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     
@@ -316,7 +314,7 @@ def plots_errors_per_student(df, filter, folder):
         ax.set_ylabel('Number of students')
         ax.legend()
         ax.set_title(f'Distribution of {error}')
-        plt.savefig(f"../plot/{folder}/{error}_per_student_hist.png")
+        plt.savefig(f"{folder}/{error}_per_student_hist.png")
         #plt.show()
         
         fig, ax = plt.subplots(figsize=(10, 5))
@@ -337,7 +335,7 @@ def plots_errors_per_student(df, filter, folder):
     plt.savefig(f"{folder}/errors_per_student_nb_tentative.png")
     
 
-def plots_errors(df, filter, folder): 
+def plots_errors(df, folder, filter="success"): 
     
     tot_tentatives = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     
@@ -419,7 +417,7 @@ def plots_errors(df, filter, folder):
         #plt.show()
     
     
-def plots_distance_2dim(df, folder, filter): 
+def plots_distance_2dim(df, folder, filter="success"): 
     tot_tentatives = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     
     for col in ['euclidean_distance', 'delta_successive']:
@@ -693,7 +691,7 @@ def plots_comparision_tasks(df, folder, filter_task):
             plt.savefig(f"{folder}/{col}_{filter_task}_nb_tentative.png")
             
         
-def plots_code_space(df, folder, success_filter): 
+def plots_code_space(df, folder, success_filter=1): 
     
     # plot euclidean distance and Submission_TreeDist_LastSubmission per pct_activity for successful and failing students
     names = ['L1', 'L2', 'L3']
@@ -788,12 +786,9 @@ def plots_code_space(df, folder, success_filter):
 
     plt.savefig(f"{folder}/scatterplot_euclidean_code_space_{label}.png")
     #plt.show()
-
-    for df in dfs: 
-        print(stats.pearsonr(df['delta_successive'], df['Submission_TreeDist_Successive']))
     
 
-def plots_error_code_world_succ(df, folder, success_filter, type): 
+def plots_error_code_world_succ(df, folder, success_filter=1, type="bucket"): 
     
     # plot euclidean distance and Submission_TreeDist_LastSubmission per pct_activity for successful and failing students
     names = ['L1', 'L2', 'L3']
@@ -850,25 +845,3 @@ def plots_error_code_world_succ(df, folder, success_filter, type):
                 plt.savefig(f"{folder}/barplot_error_per_student_{name}_tentative_{tentatives[i]}_euclidean_code_space_{label}.png")
                 #plt.show()
         
-        
-def plot_loss_roc(loss_train, loss_valid, roc_auc, fpr, tpr, roc=False): 
-    # Plot ROC curve
-    if roc:
-        plt.figure()
-        plt.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
-        plt.plot([0, 1], [0, 1], color='grey', lw=2, linestyle='--')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('Receiver Operating Characteristic (ROC) Curve')
-        plt.legend(loc='lower right')
-        #plt.show()
-    
-    # Plot loss
-    plt.plot(loss_train, label='Train')
-    plt.plot(loss_valid, label='Valid')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.legend()
-    #plt.show()

@@ -1,67 +1,8 @@
-import warnings
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from functools import reduce
 import pickle
-
-
-def compare_patterns(df1, df2, name1, name2):
-    
-    # Cleaning NaN values
-    df1 = df1.dropna()
-    df2 = df2.dropna()
-    
-    df1['S-Support (S-Frequency %)'] = df1['S-Support (S-Frequency %)'].astype(float)
-    df2['S-Support (S-Frequency %)'] = df2['S-Support (S-Frequency %)'].astype(float)
-    
-    # Extract patterns from each dataframe
-    patterns1 = set(df1['Pattern'])
-    patterns2 = set(df2['Pattern'])
-    
-    # Identify common patterns
-    common_patterns = patterns1.intersection(patterns2)
-    
-    # Count similar and different patterns
-    similar_patterns_count = len(common_patterns)
-    different_patterns_count = abs(len(patterns1) - len(patterns2))
-    
-    # Perform t-test for each common pattern
-    for pattern in common_patterns:
-        df1_pattern = df1[df1['Pattern'] == pattern]['S-Support (S-Frequency %)'].values[0]
-        df2_pattern = df2[df2['Pattern'] == pattern]['S-Support (S-Frequency %)'].values[0]
-        if df1_pattern > df2_pattern:
-            print(f"Pattern: {pattern} (Higher in {name1})")
-            print(f"S-Frequency % in {name1}: {df1_pattern}")
-            print(f"S-Frequency % in {name2}: {df2_pattern}")
-            print()
-        elif df1_pattern < df2_pattern: 
-            print(f"Pattern: {pattern} (Higher in {name2})")
-            print(f"S-Frequency % in {name1}: {df1_pattern}")
-            print(f"S-Frequency % in {name2}: {df2_pattern}")
-            print()
-        else: 
-            print(f"Pattern: {pattern} (Equal in both)")
-            print(f"S-Frequency % in {name1}: {df1_pattern}")
-            print(f"S-Frequency % in {name2}: {df2_pattern}")
-            print()
-    
-    # Print different patterns and their significance
-    different_patterns = patterns1.symmetric_difference(patterns2)
-    for pattern in different_patterns:
-        if pattern in patterns1:
-            df1_pattern = df1[df1['Pattern'] == pattern]['I-Support (I-Frequency Mean)']
-            print(f"Pattern: {pattern} (Exists in {name1}, but not in {name2})")
-            print(f"I-Frequency Mean in DataFrame 1: {df1_pattern.values[0]}")
-            print()
-        else:
-            df2_pattern = df2[df2['Pattern'] == pattern]['I-Support (I-Frequency Mean)']
-            print(f"Pattern: {pattern} (Exists in {name2}, but not in {name1})")
-            print(f"I-Frequency Mean in DataFrame 2: {df2_pattern.values[0]}")
-            print()
-    
-    return similar_patterns_count, different_patterns_count
-
 
 
 def plot_heatmap_presence(data, test, experiment, folder):
@@ -102,7 +43,7 @@ def plot_heatmap_presence(data, test, experiment, folder):
 
     # Plot the histogram
     plt.figure(figsize=(12, 8))
-    plt.imshow(merged_df.values, cmap='Blues', aspect='auto')
+    plt.imshow(merged_df.values, cmap='magma', aspect='auto')
 
     # Add text annotations for each cell
     for i in range(presence_matrix.shape[0]):

@@ -3,12 +3,15 @@ import pandas as pd
 from preprocess import *
 from plots_analysis import *
 
+from scipy import stats
+
 import warnings
 warnings.filterwarnings('ignore')
 
+import os
 
 
-def run_preprocessing():
+def run_preprocessing(plots=False):
     
     # Paths to the data files, change accordingly
     folder_path = "../data/"
@@ -43,12 +46,9 @@ def run_preprocessing():
     robotarm_l2.to_csv(folder_path + 'robotarm_l2.csv', index=False)
     robotarm_l3.to_csv(folder_path + 'robotarm_l3.csv', index=False)
     
-    print("Preprocessing robot arm data with no penalties and optimal penalties...")
+    print("Preprocessing robot arm data with no penalties...")
     robotarm_no_penalties = preprocessing_general(robotarm_df, KEY_VECTORS, INIT_WORLDSPACES, ACTIVITY_IDS, ACTIVITY_NBS, NO_PENALTIES, code=True)
     robotarm_no_penalties.to_csv(folder_path + 'robotarm_no_penalties.csv', index=False)
-    
-    robotarm_optimal_penalties = preprocessing_general(robotarm_df, KEY_VECTORS, INIT_WORLDSPACES, ACTIVITY_IDS, ACTIVITY_NBS, OPTIMAL_PENALTIES, code=True)
-    robotarm_optimal_penalties.to_csv(folder_path + 'robotarm_optimal_penalties.csv', index=False)
     
     print("Saving files robotarm_only_l1_l2.csv...")
     # useful for prediction 
@@ -59,9 +59,62 @@ def run_preprocessing():
     robotarm_123 = robotarm[robotarm['activity_all'] == "123"]
     robotarm_123.to_csv(folder_path + 'robotarm_123.csv', index=False)
     
+    print("Finished preprocessing and files saved.")
+    
+    print("Correlation between world space distances and code space distances...")
+    
+    print("Correlation for all activities: ", stats.pearsonr(robotarm['delta_successive'], robotarm['Submission_TreeDist_Successive']))
+    print("Correlation for Task 1: ", stats.pearsonr(robotarm_l1['delta_successive'], robotarm_l1['Submission_TreeDist_Successive']))
+    print("Correlation for Task 2: ", stats.pearsonr(robotarm_l2['delta_successive'], robotarm_l2['Submission_TreeDist_Successive']))
+    print("Correlation for Task 3: ", stats.pearsonr(robotarm_l3['delta_successive'], robotarm_l3['Submission_TreeDist_Successive']))
+    
+    print("Finished correlation.")
+    
+    if plots:
+        print("Plotting...")
+        folder = "../plots/" # change accordingly: root folder for the plots
+        filter = "success" # change accordingly : "success" or "error" 
+        success_filter = 1 # change accordingly : 1 or 0
+        type_split = "bucket" # change accordingly : "bucket" or "median"
+        
+        folder_general = folder + "general"
+        folder_l1 = folder + "l1"
+        folder_l2 = folder + "l2"
+        folder_l3 = folder + "l3"
+        #folder_no_penalties = folder_general + "no_penalties/"
+        #folder_only_l1_l2 = folder_general + "only_l1_l2/"
+        #folder_123 = folder_general + "123/"
+        
+        dfs = [robotarm, robotarm_l1, robotarm_l2, robotarm_l3]
+        folders = [folder_general, folder_l1, folder_l2, folder_l3]
+        
+        for i in range(len(dfs)):
+            print("Create folder...")
+            
+            if not os.path.exists(folders[i]):
+                os.makedirs(folders[i])
+
+            df_per_student = grouped_per_student(dfs[i])
+            df = dfs[i]
+            folder = folders[i]
+            
+            # plot the data per student
+            plots_per_student(df_per_student, folder, filter)
+            plots_errors_per_student(df_per_student, folder, filter)
+            
+            # plot the data in general 
+            plots_general(df, folder, filter)
+            plots_errors(df, folder, filter)
+            
+            # plot in paraller code and world space distances
+            plots_code_space(df, folder, success_filter)
+            # plot error, code and world space distances
+            plots_error_code_world_succ(df, folder, success_filter, type_split)
+            
+            print("Finished plotting for folder: ", folder)
+        
+    
     
 if __name__ == "__main__":
     
-    run_preprocessing()
-    
-    print("Finished preprocessing and file saved.")
+    run_preprocessing(plots=True) # set to True if you want to plot the data
