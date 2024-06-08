@@ -125,8 +125,6 @@ class ModelTrainer:
         error_sequences = np.array(self.sequence_creator.error_sequences, dtype=object)
         case_sequences = np.array(self.sequence_creator.case_sequences, dtype=object)
         success_sequences = np.array(self.sequence_creator.success_sequences, dtype=object)
-        #print("world_sequences : ", world_sequences)
-        #print("code_sequences : ", code_sequences)
 
         for fold, (train_index, test_index) in enumerate(kf.split(self.sequence_creator.world_sequences)):
             
