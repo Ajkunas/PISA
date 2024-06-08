@@ -55,6 +55,10 @@ def run_plot_experiment_truncation(experiment_name, data_path, args_seq, args_mo
     modes = ["first", "last"]
     method_params = [1, 2, 3, 4, 5, 6, 7, 8]
     results = {}
+    
+    baseline_creator = create_sequence_creator(data, args_seq)
+    baseline_trainer = create_model_trainer(baseline_creator, args_model)
+    baseline_results = baseline_trainer.cross_validate()
 
     for sequence_method in sequence_methods:
         mean_aucs, std_aucs = {}, {}
@@ -74,7 +78,7 @@ def run_plot_experiment_truncation(experiment_name, data_path, args_seq, args_mo
             std_aucs[sequence_method][mode] = std_auc_mode
         
         # plot results
-        plot_truncate(sequence_method, method_params, mean_aucs, std_aucs, results[0]["Mean AUC"], plot_folder)
+        plot_truncate(sequence_method, method_params, mean_aucs, std_aucs, baseline_results[0]["Mean AUC"], plot_folder)
 
 def main():
     experiment_type = sys.argv[1]
