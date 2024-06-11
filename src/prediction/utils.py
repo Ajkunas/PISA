@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import OneHotEncoder
 
 
-
 def create_sequences(df, split_type, one_hot=False): 
     # Try to change the values of the columns to numerical values
     if not one_hot:
@@ -110,20 +109,28 @@ def one_hot_encode_sequences(sequences):
         return encoded_sequences, encoder
 
 
-def pad_with_pattern(sequences, max_length, pattern):
+def pad_with_pattern(sequences, max_length, pattern, padding_position):
     padded_sequences = []
     for seq in sequences:
-        #print("seq : ", seq)
         if len(seq) < max_length:
             padding_length = max_length - len(seq)
-            #print("padding_length : ", padding_length)
-            padding = np.tile(pattern, padding_length // len(pattern))[:padding_length]
-            #print("padding : ", padding)
-            padded_seq = np.concatenate([padding, seq])
+            padding = np.tile(pattern, (padding_length // len(pattern)) + 1)[:padding_length]
+            if padding_position == 'pre':
+                padded_seq = np.concatenate([padding, seq])
+            else:
+                padded_seq = np.concatenate([seq, padding])
         else:
             padded_seq = seq[:max_length]
         padded_sequences.append(padded_seq)
     return np.array(padded_sequences, dtype=np.float32)
+
+
+def pad_sequences(sequences, pad_value, max_len, padding='post'):
+    
+    if padding == 'post':
+        return [seq + pad_value*(max_len - len(seq)) if len(seq) < max_len else seq[:max_len] for seq in sequences]
+    else:
+        return [pad_value * (max_len - len(seq)) + seq if len(seq) < max_len else seq[:max_len] for seq in sequences]
 
 
 def split_data(data, train_size, val_ratio=0.5):
@@ -185,9 +192,9 @@ def plot_truncate(method, method_params, mean_aucs, std_aucs, baseline_auc, path
     plt.axhline(y=baseline_auc, color='r', linestyle='--', label=f"Baseline Mean AUC: {baseline_auc:.2f}")
 
     # Adding labels and title
-    plt.xlabel("Number of attributes to truncate")
+    plt.xlabel("Number of Attempts")
     plt.ylabel("Mean AUC")
-    plt.title("Mean AUC vs Number of attempts to truncate")
+    plt.title("Mean AUC vs Number of Attempts")
     plt.legend()
     
     if not os.path.exists(path_to_save):

@@ -133,7 +133,8 @@ class SequenceCreator:
                 "error_world_code": lambda w, co, e, ca, s: (e + w + co, s[0]), 
                 "world_error_code": lambda w, co, e, ca, s: (w + e + co, s[0]), 
                 "world_code_error_case": lambda w, co, e, ca, s: (w + co + e + ca, s[0]),
-                "code_world_error": lambda w, co, e, ca, s: (co + w + e, s[0]), # Could add other cases
+                "code_world_error": lambda w, co, e, ca, s: (co + w + e, s[0]),
+                "case_world_code": lambda w, co, e, ca, s: (ca + w + co, s[0]) # Could add other cases
             }
             
             

@@ -39,7 +39,7 @@ def run_experiment(experiment_name, data_path, args_seq, args_model, output_file
     data = load_data(data_path)
     sequence_creator = create_sequence_creator(data, args_seq)
     model_trainer = create_model_trainer(sequence_creator, args_model)
-    results = model_trainer.cross_validate()
+    results, model = model_trainer.cross_validate()
     args_seq['data'] = data_path.split("/")[-1]
 
     existing_data = load_existing_results(output_file)
@@ -58,7 +58,7 @@ def run_plot_experiment_truncation(experiment_name, data_path, args_seq, args_mo
     
     baseline_creator = create_sequence_creator(data, args_seq)
     baseline_trainer = create_model_trainer(baseline_creator, args_model)
-    baseline_results = baseline_trainer.cross_validate()
+    baseline_results, model = baseline_trainer.cross_validate()
 
     for sequence_method in sequence_methods:
         mean_aucs, std_aucs = {}, {}
@@ -68,7 +68,7 @@ def run_plot_experiment_truncation(experiment_name, data_path, args_seq, args_mo
                 args_seq.update({"sequence_method": sequence_method, "method_mode": mode, "method_param": n})
                 sequence_creator = create_sequence_creator(data, args_seq)
                 model_trainer = create_model_trainer(sequence_creator, args_model)
-                results = model_trainer.cross_validate()
+                results, model = model_trainer.cross_validate()
                 mean_auc_mode.append(results[0]["Mean AUC"])
                 std_auc_mode.append(results[0]["Standard Deviation of AUC"])
             
