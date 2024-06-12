@@ -46,8 +46,10 @@ class SequenceCreator:
         truncated_sequences = []
         for seq in sequences:
             if mode == 'first':
+                #print("Truncating first")
                 truncated_sequences.append(seq[:n])
             elif mode == 'last':
+                #print("Truncating last")
                 truncated_sequences.append(seq[-n:])
             else:
                 raise ValueError("Mode not supported. Use 'first' or 'last'.")

@@ -9,7 +9,7 @@ from sklearn.model_selection import KFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, roc_curve, auc
 
-from utils import split_data, pad_with_pattern
+from utils import split_data, pad_with_pattern, pad_sequences
 from sequence_creator import SequenceCreator
 
 import warnings
@@ -28,7 +28,7 @@ class ModelTrainer:
         self.task = task
         self.evaluate = evaluate
         self.k = k
-        self.padding = padding  
+        self.padding = padding
 
     def train(self):
         train_size = 1 - self.test_size
@@ -38,23 +38,34 @@ class ModelTrainer:
         case_seq_train, case_seq_test, case_seq_valid = split_data(self.sequence_creator.case_sequences, train_size)
         success_seq_train, success_seq_test, success_seq_valid = split_data(self.sequence_creator.success_sequences, train_size)
 
-        X_train, y_train = self.sequence_creator.create_features_labels(self.task, world_seq_train, code_seq_train, error_seq_train, case_seq_train, success_seq_train)
-        X_test, y_test = self.sequence_creator.create_features_labels(self.task, world_seq_test, code_seq_test, error_seq_test, case_seq_test, success_seq_test)
-        X_valid, y_valid = self.sequence_creator.create_features_labels(self.task, world_seq_valid, code_seq_valid, error_seq_valid, case_seq_valid, success_seq_valid)
-        
-        #print("X_train", X_train)
-        max_len = max(len(seq) for seq in X_train)
-        pad_value = [0, 0] if self.sequence_creator.one_hot else [0]
-        
-        if not self.sequence_creator.one_hot or self.task in ["code_error_n_only", "code_n_only", "error_n_only"]:
-            X_train_padded = X_train
-            X_test_padded = X_test
-            X_valid_padded = X_valid
-        else:
-            X_train_padded = pad_with_pattern(X_train, max_len, pad_value, padding_position=self.padding)
-            X_test_padded = pad_with_pattern(X_test, max_len, pad_value, padding_position=self.padding)
-            X_valid_padded = pad_with_pattern(X_valid, max_len, pad_value, padding_position=self.padding)
-  
+        pad_value = [0]
+
+        # Padding sequences independently
+        max_len_world = max(len(seq) for seq in world_seq_train)
+        max_len_code = max(len(seq) for seq in code_seq_train)
+        max_len_error = max(len(seq) for seq in error_seq_train)
+        max_len_case = max(len(seq) for seq in case_seq_train)  
+
+        world_seq_train_padded = pad_sequences(world_seq_train, pad_value, max_len_world, padding=self.padding)
+        code_seq_train_padded = pad_sequences(code_seq_train, pad_value, max_len_code , padding=self.padding)
+        error_seq_train_padded = pad_sequences(error_seq_train, pad_value, max_len_error, padding=self.padding)
+        case_seq_train_padded = pad_sequences(case_seq_train, pad_value, max_len_case, padding=self.padding)
+
+        world_seq_test_padded = pad_sequences(world_seq_test, pad_value, max_len_world, padding=self.padding)
+        code_seq_test_padded = pad_sequences(code_seq_test, pad_value, max_len_code, padding=self.padding)
+        error_seq_test_padded = pad_sequences(error_seq_test, pad_value, max_len_error, padding=self.padding)
+        case_seq_test_padded = pad_sequences(case_seq_test, pad_value, max_len_case, padding=self.padding)
+
+        world_seq_valid_padded = pad_sequences(world_seq_valid, pad_value, max_len_world, padding=self.padding)
+        code_seq_valid_padded = pad_sequences(code_seq_valid, pad_value, max_len_code, padding=self.padding)
+        error_seq_valid_padded = pad_sequences(error_seq_valid, pad_value, max_len_error, padding=self.padding)
+        case_seq_valid_padded = pad_sequences(case_seq_valid, pad_value, max_len_case, padding=self.padding)
+
+        # Create features and labels
+        X_train, y_train = self.sequence_creator.create_features_labels(self.task, world_seq_train_padded, code_seq_train_padded, error_seq_train_padded, case_seq_train_padded, success_seq_train)
+        X_test, y_test = self.sequence_creator.create_features_labels(self.task, world_seq_test_padded, code_seq_test_padded, error_seq_test_padded, case_seq_test_padded, success_seq_test)
+        X_valid, y_valid = self.sequence_creator.create_features_labels(self.task, world_seq_valid_padded, code_seq_valid_padded, error_seq_valid_padded, case_seq_valid_padded, success_seq_valid)
+
 
         if self.sequence_creator.one_hot:
             y_train = np.argmax(y_train, axis=1)
@@ -67,20 +78,20 @@ class ModelTrainer:
         
         if self.model_type == 'rf':
             model = RandomForestClassifier()
-            model.fit(X_train_padded, y_train)
-            y_prob = model.predict_proba(X_test_padded)[:, 1]
-            y_pred = model.predict(X_test_padded)
+            model.fit(X_train, y_train)
+            y_prob = model.predict_proba(X_test)[:, 1]
+            y_pred = model.predict(X_test)
             accuracy = accuracy_score(y_test, y_pred)
             fpr, tpr, _ = roc_curve(y_test, y_prob)
             roc_auc = auc(fpr, tpr)
             loss_train_arr, loss_valid_arr = [], []
         else:
 
-            X_train = torch.tensor(X_train_padded, dtype=torch.float32)
+            X_train = torch.tensor(X_train, dtype=torch.float32)
             y_train = torch.tensor(y_train, dtype=torch.float32)
-            X_test = torch.tensor(X_test_padded, dtype=torch.float32)
+            X_test = torch.tensor(X_test, dtype=torch.float32)
             y_test = torch.tensor(y_test, dtype=torch.float32)
-            X_valid = torch.tensor(X_valid_padded, dtype=torch.float32)
+            X_valid = torch.tensor(X_valid, dtype=torch.float32)
             y_valid = torch.tensor(y_valid, dtype=torch.float32)
 
             if not self.sequence_creator.one_hot and self.task in ["code_error_n_only", "code_n_only", "error_n_only"]:
@@ -140,18 +151,35 @@ class ModelTrainer:
             error_seq_test = error_sequences[test_index]
             case_seq_test = case_sequences[test_index]
             success_seq_test = success_sequences[test_index]
+            #print("world_seq_train: ", world_seq_train)
 
-            X_train, y_train = self.sequence_creator.create_features_labels(self.task, world_seq_train, code_seq_train, error_seq_train, case_seq_train, success_seq_train)
-            X_test, y_test = self.sequence_creator.create_features_labels(self.task, world_seq_test, code_seq_test, error_seq_test, case_seq_test, success_seq_test)
+            pad_value = [0]
+
+            # Padding sequences independently
+            max_len_world = max(len(seq) for seq in world_seq_train)
+            max_len_code = max(len(seq) for seq in code_seq_train)
+            max_len_error = max(len(seq) for seq in error_seq_train)
+            max_len_case = max(len(seq) for seq in case_seq_train)
             
-            if not self.sequence_creator.one_hot and self.task in ["code_error_n_only", "code_n_only", "error_n_only"]:
-                X_train_padded = X_train
-                X_test_padded = X_test
-            else:
-                max_len = max(len(seq) for seq in X_train)
-                pad_value = [0, 0] if self.sequence_creator.one_hot else [0]
-                X_train_padded = pad_with_pattern(X_train, max_len, pad_value, padding_position=self.padding)
-                X_test_padded = pad_with_pattern(X_test, max_len, pad_value, padding_position=self.padding)
+            #if max_len_world != max_len_code or max_len_world != max_len_error or max_len_world != max_len_case:
+            #    print("Padding sequences with different lengths")
+            #    print(max_len_world, max_len_code, max_len_error, max_len_case)
+            #else: 
+            #    print("Padding sequences with same lengths")
+            #    print(max_len_world, max_len_code, max_len_error, max_len_case)
+
+            world_seq_train_padded = pad_sequences(world_seq_train, pad_value, max_len_world, padding=self.padding)
+            code_seq_train_padded = pad_sequences(code_seq_train, pad_value, max_len_code, padding=self.padding)
+            error_seq_train_padded = pad_sequences(error_seq_train, pad_value, max_len_error, padding=self.padding)
+            case_seq_train_padded = pad_sequences(case_seq_train, pad_value, max_len_case, padding=self.padding)
+
+            world_seq_test_padded = pad_sequences(world_seq_test, pad_value, max_len_world, padding=self.padding)
+            code_seq_test_padded = pad_sequences(code_seq_test, pad_value, max_len_code, padding=self.padding)
+            error_seq_test_padded = pad_sequences(error_seq_test, pad_value, max_len_error, padding=self.padding)
+            case_seq_test_padded = pad_sequences(case_seq_test, pad_value, max_len_case, padding=self.padding)
+
+            X_train, y_train = self.sequence_creator.create_features_labels(self.task, world_seq_train_padded, code_seq_train_padded, error_seq_train_padded, case_seq_train_padded, success_seq_train)
+            X_test, y_test = self.sequence_creator.create_features_labels(self.task, world_seq_test_padded, code_seq_test_padded, error_seq_test_padded, case_seq_test_padded, success_seq_test)
 
             if self.sequence_creator.one_hot:
                 y_train = np.argmax(y_train, axis=1)
@@ -159,10 +187,10 @@ class ModelTrainer:
             else:
                 y_train = np.array(y_train)
                 y_test = np.array(y_test)
-
-            X_train = torch.tensor(X_train_padded, dtype=torch.float32)
+            
+            X_train = torch.tensor(X_train, dtype=torch.float32)
             y_train = torch.tensor(y_train, dtype=torch.float32)
-            X_test = torch.tensor(X_test_padded, dtype=torch.float32)
+            X_test = torch.tensor(X_test, dtype=torch.float32)
             y_test = torch.tensor(y_test, dtype=torch.float32)
 
             if not self.sequence_creator.one_hot and self.task in ["code_error_n_only", "code_n_only", "error_n_only"]:

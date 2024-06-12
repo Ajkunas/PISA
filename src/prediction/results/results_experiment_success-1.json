@@ -27,10 +27,10 @@
         },
         "results": [
             {
-                "Mean AUC": "0.76",
+                "Mean AUC": "0.80",
                 "Standard Deviation of AUC": "0.03",
-                "Mean Accuracy": "0.80",
-                "Standard Deviation of Accuracy": "0.03"
+                "Mean Accuracy": "0.81",
+                "Standard Deviation of Accuracy": "0.02"
             }
         ]
     },
@@ -62,10 +62,10 @@
         },
         "results": [
             {
-                "Mean AUC": "0.82",
+                "Mean AUC": "0.83",
                 "Standard Deviation of AUC": "0.02",
-                "Mean Accuracy": "0.80",
-                "Standard Deviation of Accuracy": "0.02"
+                "Mean Accuracy": "0.81",
+                "Standard Deviation of Accuracy": "0.03"
             }
         ]
     },
@@ -93,9 +93,9 @@
         },
         "results": [
             {
-                "Mean AUC": "0.84",
-                "Standard Deviation of AUC": "0.01",
-                "Mean Accuracy": "0.81",
+                "Mean AUC": "0.85",
+                "Standard Deviation of AUC": "0.02",
+                "Mean Accuracy": "0.83",
                 "Standard Deviation of Accuracy": "0.02"
             }
         ]
