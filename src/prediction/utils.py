@@ -109,40 +109,10 @@ def one_hot_encode_sequences(sequences):
         return encoded_sequences, encoder
 
 
-def pad_with_pattern(sequences, pattern, max_length, padding_position='pre'):
-    padded_sequences = []
-    for seq in sequences:
-        if len(seq) < max_length:
-            padding_length = max_length - len(seq)
-            padding = np.tile(pattern, (padding_length // len(pattern)) + 1)[:padding_length]
-            if padding_position == 'pre':
-                padded_seq = np.concatenate([padding, seq])
-            else:
-                padded_seq = np.concatenate([seq, padding])
-        else:
-            padded_seq = seq[:max_length]
-        padded_sequences.append(padded_seq)
-    return np.array(padded_sequences, dtype=np.float32)
-
-
 def pad_sequences(sequences, pad_value, max_len, padding='pre'):
     if padding == 'post':
-        #print("Padding sequences in post ! ")
-        #print("Padding sequences in pre ! ")
-        #print("Sequences before padding: ", len(sequences))
-        #print("Max length: ", max_len)
-        #print("Sequences before padding: ", sequences)
-        temp = [seq + pad_value*(max_len - len(seq)) if len(seq) < max_len else seq[:max_len] for seq in sequences]
-        #print("Sequences after padding: ", temp)
         return [seq + pad_value*(max_len - len(seq)) if len(seq) < max_len else seq[:max_len] for seq in sequences]
     else:
-        #print("Padding sequences in pre ! ")
-        #print("Padding sequences in pre ! ")
-        #print("Sequences before padding: ", len(sequences))
-        #print("Max length: ", max_len)
-        #print("Sequences before padding: ", sequences)
-        temp = [pad_value * (max_len - len(seq)) + seq if len(seq) < max_len else seq[:max_len] for seq in sequences]
-        #print("Sequences after padding: ", temp)
         return [pad_value * (max_len - len(seq)) + seq if len(seq) < max_len else seq[:max_len] for seq in sequences]
 
 

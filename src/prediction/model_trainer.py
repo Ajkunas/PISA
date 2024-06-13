@@ -9,7 +9,7 @@ from sklearn.model_selection import KFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, roc_curve, auc
 
-from utils import split_data, pad_with_pattern, pad_sequences
+from utils import split_data, pad_sequences
 from sequence_creator import SequenceCreator
 
 import warnings
